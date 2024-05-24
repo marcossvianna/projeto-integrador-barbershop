@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="icon" type="favicon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="/static/javascript/script.js"></script>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <title>Barber Shop Consulta de Agendamentos</title>
+
+</head>
+<body>
+    <header>
+        <nav id="navbar">
+            <i class="fa-solid fa-cut" id="nav_logo"> Barber Shop</i>
+            <button class="btn-default">
+                <a href="/fale_conosco" style="text-decoration: none; color: black;">
+                    Fale conosco | 11 99999-9999
+                </a>
+            </button>
+
+            <button id="mobile_btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </nav>
+
+        <div id="mobile_menu">
+            <button class="btn-default"><a href="/login_admin" class="btn-default">Agendamentos</a></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Consulta de Agendamentos</h1>
+
+        <table id="data-table" class="table" >
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Serviço</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <main id="content">
+            <section id="home">
+                <!-- Modal for Editing -->
+                <div id="editModal" style="display: none; width: 500px;  padding: 10px;" class="page-cadastro" >
+                    <h2>Editar Agendamento</h2>
+                    <form id="editForm" class="formLogin">
+                        <input type="hidden" id="edit-id">
+                        <label for="edit-nome">Nome:</label>
+                        <input type="text" id="edit-nome" required><br>
+                        <label for="edit-email">Email:</label>
+                        <input type="email" id="edit-email" required><br>
+                        <label for="edit-telefone">Telefone:</label>
+                        <input type="text" id="edit-telefone" required><br>
+                        <label for="edit-servico">Serviço:</label>
+                        <select type="text" id="edit-servico" class="select-agenda input-agenda">
+                            <option value="corte" id="corte" name="corte">Corte</option>
+                            <option value="barba" id="barba" name="barba">Barba</option>
+                            <option value="coloracao" id="coloracao" name="coloracao">Coloração</option>
+                            <option value="tratamento_capilar" id="tratamento_capilar" name="tratamento_capilar">Tratamento Capilar</option>
+                        </select>
+
+                        <label for="edit-data">Data:</label>
+                        <input type="date" id="edit-data" required><br>
+                        <label for="edit-hora">Hora:</label>
+                        <input type="time" id="edit-hora" required><br>
+                        <button type="submit">Salvar</button>
+                        <button type="button" onclick="$('#editModal').hide();">Cancelar</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: '/consulta_agenda',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.length === 0) {
+                            alert("Nenhum agendamento encontrado");
+                            return;
+                        }
+
+                        for (let i = 0; i < data.length; i++) {
+                            let row = "<tr>";
+                            row += "<td align='center'>" + data[i].id + "</td>";
+                            row += "<td align='center'>" + data[i].nome + "</td>";
+                            row += "<td align='center'>" + data[i].email + "</td>";
+                            row += "<td align='center'>" + data[i].telefone + "</td>";
+                            row += "<td align='center'>" + data[i].servico + "</td>";
+                            row += "<td align='center'>" + data[i].data + "</td>";
+                            row += "<td align='center'>" + data[i].hora + "</td>";
+                            row += "<td align='center'><button type='button' class='btns btns-editar' data-id='" + data[i].id + "'>Editar</button> <button type='button' class='btns btns-excluir' data-id='" + data[i].id + "'>Excluir</button></td>";
+                            row += "</tr>";
+                            $("#data-table tbody").append(row);
+                        }
+
+                        $("#data-table").DataTable();
+
+                        $('.btns-excluir').on('click', function() {
+                            const id = $(this).data('id');
+                            if (confirm('Tem certeza que deseja excluir este agendamento?')) {
+                                $.ajax({
+                                    url: '/delete_agendamento/' + id,
+                                    type: 'POST',
+                                    success: function(response) {
+                                        if (response.success) {
+                                            location.reload();
+                                        } else {
+                                            alert('Erro ao excluir agendamento.');
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+                        $('.btns-editar').on('click', function() {
+                            const id = $(this).data('id');
+                            const row = $(this).closest('tr');
+                            $('#edit-id').val(id);
+                            $('#edit-nome').val(row.find('td:eq(1)').text());
+                            $('#edit-email').val(row.find('td:eq(2)').text());
+                            $('#edit-telefone').val(row.find('td:eq(3)').text());
+                            $('#edit-servico').val(row.find('td:eq(4)').text());
+                            $('#edit-data').val(row.find('td:eq(5)').text());
+                            $('#edit-hora').val(row.find('td:eq(6)').text());
+                            $('#editModal').show();
+                        });
+
+                        $('#editForm').on('submit', function(e) {
+                            e.preventDefault();
+                            const id = $('#edit-id').val();
+                            const data = {
+                                nome: $('#edit-nome').val(),
+                                email: $('#edit-email').val(),
+                                telefone: $('#edit-telefone').val(),
+                                servico: $('#edit-servico').val(),
+                                data: $('#edit-data').val(),
+                                hora: $('#edit-hora').val()
+                            };
+                            $.ajax({
+                                url: '/update_agendamento/' + id,
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(data),
+                                success: function(response) {
+                                    if (response.success) {
+                                        location.reload();
+                                    } else {
+                                        alert('Erro ao atualizar agendamento.');
+                                    }
+                                }
+                            });
+                        });
+                    },
+                    error: function() {
+                        alert('Erro ao buscar dados dos agendamentos.');
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

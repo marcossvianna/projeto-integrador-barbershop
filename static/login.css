@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #023047
+}
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 3;
+    top: 0;
+
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
+    background-color: rgb(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+.page a {
+    cursor: pointer;
+    transition: 300ms;
+}
+
+.menu-buttons {
+    display: flex !important;
+    background-color: transparent;
+    height: 100%;
+    gap: 12px;
+    z-index: 1;
+}
+
+.menu-buttons .btn-default {
+    width: 200px;
+}
+
+.formLogin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 7px;
+    padding: 30px;
+    box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.4);
+    gap: 5px;
+}
+
+.areaLogin img {
+    width: 420px;
+}
+
+.formLogin h1 {
+    padding: 0;
+    margin: 0;
+    font-weight: 500;
+    font-size: 2em;
+}
+
+.formLogin p {
+    display: inline-block;
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.formLogin input, .formLogin #wpp {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    border-radius: 4px;
+    transition: all linear 160ms;
+    outline: none;
+}
+
+
+.formLogin input:focus {
+    border: 1px solid #ffcb45;
+}
+
+.formLogin label {
+    font-size: 14px;
+    font-weight: 600;
+}
+.formLogin a:not([data-attr="wpp"]) {
+    display: inline-block;
+    margin: 7px 0;
+    font-size: 13px;
+    color: #555;
+    transition: all linear 160ms;
+    text-decoration: none;
+}
+
+.formLogin a:hover:not([data-attr="wpp"]) {
+    color: #ffcb45;
+}
+
+.btn {
+    background-color: #ffcb45;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 600;
+    border: none !important;
+    transition: all linear 160ms;
+    cursor: pointer;
+    margin: 0 !important;
+
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background-color: #ffcb45;
+
+}
+
+#form_flc {
+    width: 25vw;
+}
+
+.warning {
+    color: rgba(255, 0, 0, 0.5) !important;
+}
+
+@media screen and (max-width: 1080px) {
+    .page {
+        height: calc(100vh - 92px);
+        top: 92px;
+    }
+    .formLogin {
+        width: 100vw;
+        height: 100%;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    #form_flc {
+        width: 100vw;
+    }
+
+    .fa-arrow-right-from-bracket {
+        display: none;
+    }
+}
