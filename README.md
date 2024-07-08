@@ -1,5 +1,5 @@
 # barber-shop
-Projeto Integrador I - Univesp - Landing Page para gestão de agenda para uma barbearia.(em construção)
+Projeto Integrador I - Univesp - Landing Page para gestão de agenda para uma barbearia.
 
 ### Tecnologias para o front-end
 - HTML
